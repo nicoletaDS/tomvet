@@ -1,0 +1,40 @@
+{% load i18n %}
+
+{% block subject %}
+{% blocktrans %}Activarea contului La Piata{% endblocktrans %}
+{% endblock subject %}
+
+{% block text_body %}
+{% blocktrans %}Ai primit acest e-mail pentru a finaliza procesul de activare a contului din La Piata.{% endblocktrans %}
+
+{% trans "Acceseaza butonul de mai jos pentru activare:" %}
+<p>
+    <a href="{{ protocol }}://localhost:8000/api/users/{{ url|safe }}">
+        <button style="border: 10px; background-color: #218548; padding: 14px; border-radius: 8px; color:white  ">
+            Activare cont
+        </button>
+    </a>
+</p>
+
+{% trans "Va multumim!" %}
+
+{% blocktrans %}Echipa La Piata{% endblocktrans %}
+{% endblock text_body %}
+
+{% block html_body %}
+<p>{% blocktrans %}Ai primit acest e-mail pentru a finaliza procesul de activare a contului din La Piata.{% endblocktrans %}</p>
+
+<p>{% trans "Acceseaza butonul de mai jos pentru activare:" %}</p>
+<p>
+    <a href="{{ protocol }}://localhost:8000/api/users/{{ url|safe }}">
+        <button style="border: 10px; background-color: #218548; padding: 14px; border-radius: 8px; color:white  ">
+            Activare cont
+        </button>
+    </a>
+</p>
+
+<p>{% trans "Va multumim!" %}</p>
+
+<p>{% blocktrans %}Echipa La Piata{% endblocktrans %}</p>
+ 
+{% endblock html_body %}

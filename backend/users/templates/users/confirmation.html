@@ -1,0 +1,21 @@
+{% load i18n %}
+
+{% block subject %}
+{% blocktrans %} Contul dumneavoastra a fost creat si activat cu succes!{% endblocktrans %}
+{% endblock %}
+
+{% block text_body %}
+{% trans "Contul dumneavoastra a fost creat si este gata de utilizare!" %}
+
+{% trans "Va multumim!" %}
+
+{% blocktrans %}Echipa La Piata{% endblocktrans %}
+{% endblock text_body %}
+
+{% block html_body %}
+<p>{% trans "Contul dumneavoastra a fost creat si este gata de utilizare!" %}</p>
+
+<p>{% trans "Va multumim!" %}</p>
+
+<p>{% blocktrans %}Echipa La Piata{% endblocktrans %}</p>
+{% endblock html_body %}
