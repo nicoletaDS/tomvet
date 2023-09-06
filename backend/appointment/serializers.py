@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from pets.serializers import PetSerializer
 from users.serializers import UserSerializer
 
 from users.serializers import AddressSerializer
@@ -41,6 +42,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
     service = serializers.SerializerMethodField(read_only=True)
     user = serializers.SerializerMethodField(read_only=True)
     doctor = serializers.SerializerMethodField(read_only=True)
+    pet = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = models.Appointment
@@ -67,4 +69,12 @@ class AppointmentSerializer(serializers.ModelSerializer):
         user = obj.user
         serializer = UserSerializer(user, many=False)
         return serializer.data
+    
+    def get_pet(self, obj):
+        try:
+            pet = PetSerializer(obj.pet, many=False).data     
+        except:
+            pet = False
+            
+        return pet
   

@@ -40,12 +40,13 @@ def get_appointment(request, id):
 def add_appointment(request):
     user = request.user
     data = request.data
+    print("request", data)
     pet = get_object_or_404(Pet, pk=data['pet'])
     # returns the service or null if there is no service
     service = models.Service.objects.filter(pk=data['service']).first() 
     doctor = models.Doctor.objects.filter(pk=data['doctor']).first()
     appointment_date = date.fromisoformat(data['date']) # '2019-12-04'
-    appointment_time = time.fromisoformat(data['time']) # '04:23:01'
+ 
 
     appointment = models.Appointment.objects.create(
         user=user,
@@ -54,7 +55,7 @@ def add_appointment(request):
         doctor=doctor,
         details=data['details'],
         date=appointment_date,
-        time = appointment_time
+        time = data['time']
     )
 
     serializer = serializers.AppointmentSerializer(appointment, many=False)

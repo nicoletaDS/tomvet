@@ -9,7 +9,7 @@ class Pet(models.Model):
     cipNr = models.CharField(max_length=255)
     image = models.ImageField(upload_to='pets/', default='pet_img.png')
     passport = models.BooleanField(default=False)
-    weight = models.DecimalField(max_digits=5, decimal_places=2)
+    weight = models.CharField(max_length=255, blank=True, null=True)
     owner = models.CharField(max_length=255, blank=True)
 
     def save(self, *args, **kwargs):

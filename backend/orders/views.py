@@ -93,17 +93,18 @@ def add_order(request):
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def set_paid_order(request, id):
+    print("in set order")
     order = get_object_or_404(models.Order, pk=id)
     order.is_paid = True
-    order.is_paid = datetime.now()
+    order.paid_at = datetime.datetime.now()
     order.save()
+    print("order", order)
     serializer = serializers.OrderSerializer(order, many=False)
     return Response(serializer.data)
 
 
 @api_view(['POST'])
 def createCheckoutSession(request, id):
-
     order = models.Order.objects.get(pk=id)
     orderItems = order.orderItems.all()
     items = []
@@ -128,8 +129,8 @@ def createCheckoutSession(request, id):
                 line_items = items,
                 payment_method_types=['card',],
                 mode='payment',
-                success_url=f"{settings.SITE_URL}/orders/{id}?success=true",
-                cancel_url=f"{settings.SITE_URL}/orders/{id}?canceled=true",
+                success_url=f"{settings.SITE_URL}/comenzi/{id}?success=true",
+                cancel_url=f"{settings.SITE_URL}/comenzi/{id}?canceled=true",
             )
         return redirect(checkout_session.url)
 

@@ -39,6 +39,7 @@ def add_pet(request):
     data = request.data
     hasPassport = True if data['passport'] == 'true' else False
 
+    # birthday  must be in YYYY-MM-DD format
     pet = models.Pet.objects.create(
         user=user,
         name=data['name'],
@@ -46,6 +47,7 @@ def add_pet(request):
         cipNr=data['cipNr'],
         passport=hasPassport,
         weight = data['weight'],
+        image = data['image'],
         owner = data.get('owner', None),
     )
 

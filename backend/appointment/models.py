@@ -41,10 +41,11 @@ class Service(models.Model):
 # appointment status: 'done', 'canceled', 'pending', 
 class Appointment(models.Model): 
     user = models.ForeignKey(User,related_name='appointments', on_delete=models.DO_NOTHING, null=True, blank=True)
-    pet = models.ForeignKey(Pet,related_name='appointments', on_delete=models.CASCADE, null=True, blank=True)
-    service = models.ForeignKey(Service,related_name='appointments', on_delete=models.CASCADE, null=True, blank=True)
-    doctor = models.ForeignKey(Doctor,related_name='appointments', on_delete=models.DO_NOTHING, null=True, blank=True)
+    pet = models.ForeignKey(Pet,related_name='pets', on_delete=models.CASCADE, null=True, blank=True)
+    service = models.ForeignKey(Service,related_name='services', on_delete=models.CASCADE, null=True, blank=True)
+    doctor = models.ForeignKey(Doctor,related_name='doctors', on_delete=models.DO_NOTHING, null=True, blank=True)
     details = models.TextField(null=True, blank=True)
     date = models.DateField()
-    time = models.DateField()
+    time = models.CharField(max_length=50, default='00:00')
+    
     status = models.CharField(max_length=255, default='pending')
