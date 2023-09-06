@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import CheckoutSteps from "../components/CheckoutSteps";
 import "./style/PlaceOrderScreen.css";
 import { AppDispatch, RootState } from "../../../store/store";
-import { addOrder } from "../../orders/ordersSlice";
+import { addOrder } from "../../profile/ordersSlice";
+import { backendURL } from "../../../utils/constants/link";
 
 function PlaceOrderScreen() {
   const dispatch = useDispatch<AppDispatch>();
@@ -37,7 +38,7 @@ function PlaceOrderScreen() {
       const order: any = orderAction.payload;
       console.log("in placeOrder", order);
 
-      navigate(`/orders/${order.id}`);
+      navigate(`/comenzi/${order.id}`);
     } catch (error) {
       console.log("ERROR:", error);
       setError((error as Error).message);
@@ -59,65 +60,68 @@ function PlaceOrderScreen() {
             Email: {userInfo?.email}
           </p>
           <p>
-            <strong>Shipping address:</strong>
+            <strong>Adresa de livrare:</strong>
             <br />
-            Address: {cart.shippingAddress.address}
+            Strada: {cart.shippingAddress.str}
             <br />
-            City: {cart.shippingAddress.city}
+            Nr.: {cart.shippingAddress.nr}
             <br />
-            Postal Code: {cart.shippingAddress.postalCode}
+            Apartament.: {cart.shippingAddress.apartment}
             <br />
-            Country: {cart.shippingAddress.country}
+            Localitate: {cart.shippingAddress.city}
+            <br />
+            Judet: {cart.shippingAddress.county}
           </p>
           <p>
-            <strong>Payment method:</strong>
+            <strong>Metoda de plata:</strong>
             <br />
             card
           </p>
-
-          {error && <p className="error">{error}</p>}
-          <button
-            disabled={cart.cartItems.length === 0}
-            className="text-white bg-lilac rounded-full px-4 py-1 hover:underline"
-            onClick={placeOrder}
-          >
-            Place Order
-          </button>
-          <Link className="return-cart" to="/cart">
-            Return to cart
-          </Link>
         </div>
 
         <div className="shipping-summary">
           {cart.cartItems.length === 0 ? (
-            <p>Your cart is empty</p>
+            <p>Cosul de cumparaturi este gol</p>
           ) : (
             <>
               {cart.cartItems.map((item, index) => (
                 <div className="cart-item" key={index}>
-                  <img src={item.image} alt=""></img>
+                  <img src={backendURL + item.image} alt=""></img>
                   <p>
                     {item?.title}
                     <br />
                     {item.price}RON
                   </p>
                   <p>
-                    Qty:
+                    Cantitate:
                     <br />
                     {item.qty}
                   </p>
                   <p>
-                    Price: <br />
+                    Pret: <br />
                     <strong>{item.qty * item.price}RON</strong>
                   </p>
                 </div>
               ))}
             </>
           )}
-          <div className="price">
+          <div className="flex flex-col justify-end text-end">
             <p>
               Total: <strong>{totalPrice}RON</strong>
             </p>
+            {error && <p className="error">{error}</p>}
+            <div className="flex flex-row mt-8 justify-end text-end">
+              <Link className="return-cart" to="/cos">
+                Inapoi
+              </Link>
+              <button
+                disabled={cart.cartItems.length === 0}
+                className="text-white bg-lilac rounded-full px-6 py-1 ml-5 hover:underline"
+                onClick={placeOrder}
+              >
+                Plaseaza comanda
+              </button>
+            </div>
           </div>
         </div>
       </div>

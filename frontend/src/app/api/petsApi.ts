@@ -9,17 +9,11 @@ export const getMyPets = async () => {
   return pets.data;
 };
 
-export const addPetApi = async (
-  nameOrData: string | FormData,
-  birthday?: string,
-  cipNr?: string,
-  passport?: boolean,
-  weight?: number,
-  image?: File | null | undefined,
-  owner?: string
-): Promise<Pet> => {
+export const addPetApi = async (petData: any): Promise<Pet> => {
   const user = localStorage.getItem("auth");
   const access = user ? JSON.parse(user).access : "";
+
+  console.log("in api", petData.get("image"));
 
   const config = {
     headers: {
@@ -28,24 +22,27 @@ export const addPetApi = async (
     },
   };
 
-  let data: FormData;
+  // let data: FormData;
 
-  if (nameOrData instanceof FormData) {
-    data = nameOrData;
-  } else {
-    data = new FormData();
-    data.append("name", nameOrData);
-    data.append("birthday", birthday || "");
-    data.append("cipNr", cipNr || "");
-    data.append("passport", passport ? "true" : "false");
-    data.append("weight", weight?.toString() || "");
-    if (image !== undefined && image !== null) {
-      data.append("image", image);
-    }
-    data.append("owner", owner || "");
-  }
+  // if (nameOrData instanceof FormData) {
+  //   data = nameOrData;
+  // } else {
+  //   data = new FormData();
+  //   data.append("name", nameOrData);
+  //   data.append("birthday", birthday || "");
+  //   data.append("cipNr", cipNr || "");
+  //   data.append("passport", passport ? "true" : "false");
+  //   data.append("weight", weight?.toString() || "");
+  //   if (image !== undefined && image !== null) {
+  //     data.append("image", image);
+  //     console.log("IMAGE", image);
+  //   }
+  //   data.append("owner", owner || "");
+  // }
 
-  const pet = await axios.post(`${backendURL}/api/pets/add/`, data, config);
+  // console.log("DATA", data);
+
+  const pet = await axios.post(`${backendURL}/api/pets/add/`, petData, config);
   console.log("RSP DATA", pet.data);
   return pet.data;
 };

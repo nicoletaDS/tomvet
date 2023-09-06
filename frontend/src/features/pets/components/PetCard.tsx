@@ -1,6 +1,7 @@
 import React from "react";
 import TreatmentModal from "./TreatmentModal";
 import { treatments } from "../../../utils/constants/Treatments";
+import { backendURL } from "../../../utils/constants/link";
 
 const PetCard = ({ pet }: any) => {
   const [treatmentModalIsOpen, setTreatmentModalIsOpen] = React.useState(false);
@@ -49,7 +50,11 @@ const PetCard = ({ pet }: any) => {
           </div>
 
           <div className="h-[300px]">
-            <img className="h-full rounded-xl" src={pet?.image} alt="img" />
+            <img
+              className="h-full rounded-xl"
+              src={backendURL + pet.image}
+              alt="img"
+            />
             <div className="bg-white opacity-[65%] rounded-xl h-[35px] flex justify-center text-[30px] text-center pb-8 mx-3 mt-[-50px]">
               {pet?.name}
             </div>
@@ -66,7 +71,7 @@ const PetCard = ({ pet }: any) => {
           <div className="w-full flex flex-row justify-center">
             <div className="px-10 mr-10">
               <h2 className=" flex justify-center text-xl text-center my-3 pt-4">
-                Urmatorul Tratament:{" "}
+                Urmatorul Tratament <br /> / Programare:{" "}
               </h2>
               <button
                 className="bg-white rounded-full w-full border py-1 mb-6 hover:text-white hover:bg-lilac"
@@ -79,31 +84,33 @@ const PetCard = ({ pet }: any) => {
                 closeModal={closeTreatmentModal}
               />
 
-              {treatments.map((treatment: any, index: number) => (
-                <div className="bg-white relative rounded-xl p-4 mb-4">
-                  <button className="absolute font-bold right-2 top-0 text-xl hover:text-[24px]">
-                    ...
-                  </button>
-                  <p className="font-bold mt-2 pr-10">{treatment.title}</p>
-                  <p>{treatment.date}</p>
-                </div>
-              ))}
+              {pet.id === 2 &&
+                treatments.map((treatment: any, index: number) => (
+                  <div className="bg-white relative rounded-xl p-4 mb-4">
+                    <button className="absolute font-bold right-2 top-0 text-xl hover:text-[24px]">
+                      ...
+                    </button>
+                    <p className="font-bold mt-2 pr-10">{treatment.title}</p>
+                    <p>{treatment.date}</p>
+                  </div>
+                ))}
             </div>
 
             <div className="ml-10">
               <h2 className="flex justify-center text-xl text-center my-3 pt-4">
                 Istoric Tratamente:
               </h2>
-              {treatments.map((treatment: any, index: number) => (
-                <div className="bg-white relative max-w-[400px] rounded-xl p-4 mb-4">
-                  <button className="absolute font-bold right-2 top-0 text-xl hover:text-[24px]">
-                    ...
-                  </button>
-                  <p className="font-bold mt-2 pr-10">{treatment.title}</p>
-                  <p>{treatment.details}</p>
-                  <p>{treatment.date}</p>
-                </div>
-              ))}
+              {pet.id === 2 &&
+                treatments.map((treatment: any, index: number) => (
+                  <div className="bg-white relative max-w-[400px] rounded-xl p-4 mb-4">
+                    <button className="absolute font-bold right-2 top-0 text-xl hover:text-[24px]">
+                      ...
+                    </button>
+                    <p className="font-bold mt-2 pr-10">{treatment.title}</p>
+                    <p>{treatment.details}</p>
+                    <p>{treatment.date}</p>
+                  </div>
+                ))}
             </div>
           </div>
         </div>

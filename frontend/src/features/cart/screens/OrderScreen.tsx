@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import { RootState } from "../../../store/store";
+import { AppDispatch, RootState } from "../../../store/store";
+import { backendURL } from "../../../utils/constants/link";
+import { getAllProducts } from "../../../app/api/productsApi";
+import { payOrder } from "../../profile/ordersSlice";
 
 function OrderScreen() {
   const params = useParams();
+  const dispatch = useDispatch<AppDispatch>();
   const { id } = params;
   const [searchParams] = useSearchParams();
   const [message, setMessage] = useState("");
+  const [products, setProducts] = useState<any>([]);
 
   const ordersState = useSelector((state: RootState) => state.orders);
   const { orders, error, loading }: any = ordersState;
@@ -19,16 +24,44 @@ function OrderScreen() {
   const { loading: loadingPay } = orderPay;
 
   useEffect(() => {
-    if (searchParams.get("success")) {
-      // modifica plata in be- setIsPayed
-      setMessage("Payment successful!");
-    } else if (searchParams.get("canceled"))
-      setMessage("There was an error with the payment. Please try again.");
-  }, [searchParams]);
+    const pay = async () => {
+      if (searchParams.get("success")) {
+        const result = await dispatch(payOrder(id));
+        console.log("result", result);
+        setMessage("Payment successful!");
+      } else if (searchParams.get("canceled")) {
+        setMessage("There was an error with the payment. Please try again.");
+      }
+    };
+    pay();
+  }, [id, searchParams]);
 
   useEffect(() => {
     setOrder(orders.find((item: any) => item.id == id));
   }, [id, orders]);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getAllProducts();
+        setProducts(response);
+      } catch (error: any) {
+        console.log("Error getting products");
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const getTotal = () => {
+    let total = 0;
+    if (order) {
+      order.orderItems.map(
+        (item: any, index: number) => (total = total + item.qty * item.price)
+      );
+    }
+    return total;
+  };
 
   return (
     <div>
@@ -68,14 +101,28 @@ function OrderScreen() {
                 <strong>Metoda de plata:</strong>
                 <br />
                 card &nbsp;
-                {/* <strong>{order.isPaid ? <>Paid on {order.paidAt}</> : <>Not Paid</>}</strong> */}
+                <br />
+                <strong>
+                  {order.is_paid ? (
+                    <>Platit la {new Date(order.paid_at).toLocaleString()}</>
+                  ) : (
+                    <>Neplatit</>
+                  )}
+                </strong>
               </p>
             </div>
 
             <div className="shipping-summary">
               {order.orderItems.map((item: any, index: number) => (
                 <div className="cart-item" key={index}>
-                  <img src={item.image} alt=""></img>
+                  <img
+                    src={
+                      backendURL +
+                        products.find((x: any) => x.id == item.product)
+                          ?.image || ""
+                    }
+                    alt="img"
+                  ></img>
                   <p>
                     {item.name}
                     <br />
@@ -88,29 +135,31 @@ function OrderScreen() {
                   </p>
                   <p>
                     Pret: <br />
-                    <strong>{item.qty * item.price}&euro;</strong>
+                    <strong>{item.qty * item.price} RON</strong>
                   </p>
                 </div>
               ))}
-              <div className="float-right mt-4">
-                <p>
-                  Total: <strong>{order.totalPrice || 0}&euro;</strong>
-                </p>
+              <div className="flex justify-end">
+                <p>Total: {getTotal()} RON</p>
               </div>
 
-              {message && <p className="text-xl text-[#2ea72c]">{message}</p>}
-              {!order.isPaid && (
-                <div>
+              {message && (
+                <p className="text-xl text-[#2ea72c] text-end mt-2">
+                  {message}
+                </p>
+              )}
+              {!order.is_paid && (
+                <div className="flex justify-end">
                   {loadingPay && <p>Loading...</p>}
                   <form
-                    action={`/api/orders/${id}/stripe/create-checkout-session`}
+                    action={`http://localhost:8000/api/orders/${id}/stripe/create-checkout-session`}
                     method="POST"
                   >
                     <button
                       type="submit"
-                      className="text-white w-full bg-lilac rounded-full px-6 py-2 mt-8 float-right hover:underline"
+                      className="text-white bg-lilac rounded-full px-6 py-2 mt-8 hover:underline"
                     >
-                      Plateste comanda
+                      Plateste acum
                     </button>
                   </form>
                 </div>

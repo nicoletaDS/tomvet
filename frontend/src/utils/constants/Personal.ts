@@ -1,11 +1,11 @@
 export const personal = [
   {
     id: 10,
-    firstName: "Mariana",
+    firstName: "Marian",
     lastName: "Pop",
     title: "Medic Veterinar Primar",
     email: "m.pop@tomvet.com",
-    image: "./images/personal.png",
+    image: "./images/personal.jpg",
     phone: "0722222222",
     isPersonal: true,
     address: {
@@ -18,11 +18,11 @@ export const personal = [
   },
   {
     id: 10,
-    firstName: "Mariana",
+    firstName: "Marian",
     lastName: "Pop",
     title: "Medic Veterinar Primar",
     email: "m.pop@tomvet.com",
-    image: "./images/personal.png",
+    image: "./images/personal.jpg",
     phone: "0722222222",
     isPersonal: true,
     address: {
@@ -35,11 +35,11 @@ export const personal = [
   },
   {
     id: 10,
-    firstName: "Mariana",
+    firstName: "Marian",
     lastName: "Pop",
     title: "Medic Veterinar Primar",
     email: "m.pop@tomvet.com",
-    image: "./images/personal.png",
+    image: "./images/personal.jpg",
     phone: "0722222222",
     isPersonal: true,
     address: {

@@ -1,5 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { addOrderApi, getMyOrders } from "../../app/api/orderApis";
+import {
+  addOrderApi,
+  getMyOrders,
+  setPaidOrder,
+} from "../../app/api/orderApis";
 
 export const fetchOrders = createAsyncThunk<Order[]>(
   "orders/fetch",
@@ -7,6 +11,28 @@ export const fetchOrders = createAsyncThunk<Order[]>(
     const orders = await getMyOrders();
     localStorage.setItem("orders", JSON.stringify(orders));
     return orders;
+  }
+);
+
+export const payOrder = createAsyncThunk<any, any>(
+  "orders/pay",
+  async (id: number) => {
+    const order = await setPaidOrder(id);
+
+    const existingOrdersJSON = localStorage.getItem("orders");
+    const existingOrders = existingOrdersJSON
+      ? JSON.parse(existingOrdersJSON)
+      : [];
+    const updatedOrderIndex = existingOrders.findIndex(
+      (item: any) => item.id === order.id
+    );
+    if (updatedOrderIndex !== -1) {
+      existingOrders[updatedOrderIndex] = order;
+      // Update local storage with the modified order
+      localStorage.setItem("orders", JSON.stringify(existingOrders));
+    }
+
+    return order;
   }
 );
 
@@ -76,6 +102,25 @@ const ordersSlice = createSlice({
         state.error = null;
       })
       .addCase(addOrder.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error?.message || "An error occurred";
+      })
+      .addCase(payOrder.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(payOrder.fulfilled, (state, action) => {
+        state.loading = false;
+        // Find the index of the updated order in state.orders
+        const updatedOrderIndex = state.orders.findIndex(
+          (item: Order) => item.id === action.payload.id
+        );
+        if (updatedOrderIndex !== -1) {
+          state.orders[updatedOrderIndex] = action.payload;
+        }
+        state.error = null;
+      })
+      .addCase(payOrder.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error?.message || "An error occurred";
       });

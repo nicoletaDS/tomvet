@@ -31,13 +31,13 @@ type Task = {
 };
 
 type Appointment = {
-  id: number;
+  id?: number;
   pet: number;
   date: string;
   time: string;
   service: number;
   doctor: number;
-  details: string;
+  details?: string;
 };
 
 type Doctor = {
@@ -84,6 +84,7 @@ type Order = {
   id: number;
   orderItems: OrderItem[];
   delivery_address: Address;
+  isPaid: boolean;
 };
 
 type Product = {

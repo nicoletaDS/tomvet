@@ -5,7 +5,7 @@ import { Field, Form } from "formik";
 import AppFormField from "../../../app/components/form/FormField";
 import AppFormSubmitButton from "../../../app/components/form/FormSubmitButton";
 import AppFormImg from "../../../app/components/form/FormImg";
-import { addPet } from "../slices/petsSlice";
+import { addPet, fetchPets } from "../slices/petsSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../store/store";
 
@@ -50,11 +50,9 @@ const PetModal = (props: any) => {
         formData.append("image", selectedFile);
       }
 
-      console.log("formData", formData);
-      console.log("getall", formData.keys());
-
       await dispatch(addPet(formData));
-      //closeModal();
+      await dispatch(fetchPets());
+      closeModal();
     } catch (err: any) {
       console.log("Eroare:", err);
     }

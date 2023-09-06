@@ -2,11 +2,15 @@ import { default as dayjs } from "dayjs";
 import { useEffect, useState } from "react";
 
 import ScrollMenu from "react-horizontal-scroll-menu";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../store/store";
+import { fetchAppointments } from "../../appointment/appointmentSlice";
 
 type Select = string | number | null;
 
 const CalendarComponent = ({ selected, setSelected }: any) => {
   const [daysOfweek, setDaysOfWeek] = useState<dayjs.Dayjs[]>([]);
+  const dispatch = useDispatch<AppDispatch>();
 
   const [customFormat, setCustomFormat] = useState<string>("ddd");
   const currentDay = dayjs().format("D");
@@ -23,6 +27,12 @@ const CalendarComponent = ({ selected, setSelected }: any) => {
 
   useEffect(() => {
     setDaysOfWeek(getCurrentWeekDays());
+
+    const getAppointments = async () => {
+      await dispatch(fetchAppointments());
+    };
+
+    getAppointments();
   }, []);
 
   const MenuItem = ({ title, text, selected, key }: any) => {

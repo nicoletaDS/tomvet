@@ -6,7 +6,7 @@ import petsReducer from "../features/pets/slices/petsSlice";
 import tasksReducer from "../features/pets/slices/tasksSlice";
 import appointmentsReducer from "../features/appointment/appointmentSlice";
 import cabinetReducer from "../features/appointment/cabinetSlice";
-import ordersReducer from "../features/orders/ordersSlice";
+import ordersReducer from "../features/profile/ordersSlice";
 import orderPayReducer from "../features/cart/slices/paySlice";
 
 const reducer = {

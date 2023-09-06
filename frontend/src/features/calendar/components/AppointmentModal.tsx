@@ -6,6 +6,16 @@ import { Field, Form, FormikProps, useFormikContext } from "formik";
 import FormMsg, { MsgType } from "../../../app/components/form/FormMsg";
 import AppFormField from "../../../app/components/form/FormField";
 import AppFormSubmitButton from "../../../app/components/form/FormSubmitButton";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../store/store";
+import { services } from "../../../utils/constants/ServicesApp";
+import { doctors } from "../../../utils/constants/Doctors";
+import { timeSlots } from "../../../utils/constants/Time";
+import {
+  addAppointment,
+  fetchAppointments,
+} from "../../appointment/appointmentSlice";
+import { fetchCabinet } from "../../appointment/cabinetSlice";
 
 const customStyles = {
   overlay: {},
@@ -24,32 +34,36 @@ const customStyles = {
 };
 
 const AppointmentModal = (props: any) => {
+  const { doctors, services } = useSelector(
+    (state: RootState) => state.cabinet.cabinet
+  );
   const { modalIsOpen, closeModal } = props;
   const [isLoading, setIsLoading] = React.useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const { pets, loading, error } = useSelector(
+    (state: RootState) => state.pets
+  );
 
-  const addAppointment = async (values: any) => {
+  const addNewAppointment = async (values: any) => {
     try {
       setIsLoading(true);
-      const formData = new FormData();
-      formData.append("service", values.service);
-      formData.append("date", values.date);
-      formData.append("time", values.time);
-      formData.append("pet", values.pet);
-      formData.append("details", values.details);
-      // await dispatch(register(formData));
+      const data: Appointment = {
+        service: values.service,
+        doctor: values.doctor,
+        date: values.date,
+        time: values.time,
+        pet: values.pet,
+        details: values.details,
+      };
+
+      console.log("VALUES", values);
+      await dispatch(addAppointment(data));
+      closeModal();
     } catch (err: any) {
       console.log("Eroare:", err);
     }
     setIsLoading(false);
   };
-
-  //   if (sessionState.session?.id) {
-  //     if (sessionState.session.profile?.active) {
-  //       nav("/");
-  //     } else {
-  //       return <Login />;
-  //     }
-  //   }
 
   return (
     <Modal
@@ -69,35 +83,92 @@ const AppointmentModal = (props: any) => {
 
         <AppForm
           initialValues={{
-            title: "",
+            service: "",
+            doctor: "",
             date: "",
             time: "",
             pet: "",
             details: "",
           }}
-          // validationSchema={Yup.object().shape({ ...registerValidationSchema })}
-          onSubmit={addAppointment}
+          // validation Schema={Yup.object().shape({ ...registerValidationSchema })}
+          onSubmit={addNewAppointment}
         >
           <Form className="flex flex-col justify-center items-center align-center max-w-[350px] my-8">
             {/* {sessionState.error && (
             <FormMsg info="s-a produs o eroare" type={MsgType.ERROR} />
           )} */}
+            <p className="font-bold text-[14px] flex justify-start w-full">
+              Serviciu:
+            </p>
 
-            <Field label="Serviciu:" name="title" component={AppFormField} />
+            <Field
+              as="select"
+              name="service"
+              className="w-full p-2 rounded mb-4"
+            >
+              {services.map((item, index) => (
+                <option key={index} value={item.id}>
+                  {item.title} - aprox. {item.time} min
+                </option>
+              ))}
+            </Field>
 
-            <div className="flex flex-row">
+            <p className="font-bold text-[14px] flex justify-start w-full">
+              Medic:
+            </p>
+
+            <Field
+              as="select"
+              name="doctor"
+              className="w-full p-2 rounded mb-4"
+            >
+              {doctors.map((item, index) => (
+                <option key={index} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
+            </Field>
+
+            <div className="w-full flex flex-row justify-between">
               <div className="mr-2">
-                <Field label="Data:" name="date" component={AppFormField} />
+                <Field
+                  label="Data:"
+                  name="date"
+                  component={AppFormField}
+                  placeholder="AAAA-LL-ZZ"
+                />
               </div>
-              <div className="ml-2">
-                <Field label="Ora:" name="time" component={AppFormField} />
+              <div>
+                <p className="font-bold text-[14px] flex justify-start w-full">
+                  Ora:
+                </p>
+
+                <Field
+                  as="select"
+                  name="time"
+                  className="w-full p-1 rounded mb-4"
+                >
+                  {timeSlots.map((item, index) => (
+                    <option key={index} value={item.time}>
+                      {item.time}
+                    </option>
+                  ))}
+                </Field>
               </div>
             </div>
-            <Field
-              label="Animal de companie:"
-              name="pet"
-              component={AppFormField}
-            />
+
+            <p className="font-bold text-[14px] flex justify-start w-full">
+              Animal:
+            </p>
+
+            <Field as="select" name="pet" className="w-full p-2 rounded mb-4">
+              {pets.map((item, index) => (
+                <option key={index} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
+            </Field>
+
             <Field label="Detalii:" name="details" component={AppFormField} />
 
             <AppFormSubmitButton isLoading={isLoading} title="Salveaza" />

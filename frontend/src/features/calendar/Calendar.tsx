@@ -14,12 +14,20 @@ import CalendarComponent from "./components/CalendarComponent";
 import { default as dayjs } from "dayjs";
 import AppointmentModal from "./components/AppointmentModal";
 import TaskModal from "./components/TaskModal";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 type Select = string | number | null;
 
 const Calendar = (props: any) => {
   // if selected show task from selected day, else show all
-  const currentDay = dayjs().format("DD.MM.YYYY");
-  const [selected, setSelected] = React.useState<Select>();
+  const currentDay = dayjs().format("YYYY-MM-DD");
+  const [selected, setSelected] = React.useState<Select>(
+    Number(currentDay.slice(-2))
+  );
+
+  const { appointments, loading, error } = useSelector(
+    (state: RootState) => state.appointments
+  );
 
   // daca data e selectata
   const handleCheckboxChange = (id: any) => {
@@ -87,13 +95,16 @@ const Calendar = (props: any) => {
         </div>
 
         <div className="bg-helllilac rounded-xl flex flex-col justify-center align-center items-center pb-10 pr-10 pl-4">
-          {Tasks.map((item: any, index: number) => (
-            <TaskCard
-              item={item}
-              index={index}
-              handleChange={() => handleCheckboxChange(item.id)}
-            />
-          ))}
+          {appointments.map(
+            (item: any, index: number) =>
+              selected == Number(item.date.slice(-2)) && (
+                <TaskCard
+                  item={item}
+                  index={index}
+                  handleChange={() => handleCheckboxChange(item.id)}
+                />
+              )
+          )}
         </div>
       </div>
     </div>

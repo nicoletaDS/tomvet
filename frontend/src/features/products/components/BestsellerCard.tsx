@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { backendURL } from "../../../utils/constants/link";
 
 const BestsellerCard = ({ item, index }: any) => {
   return (
@@ -7,7 +8,11 @@ const BestsellerCard = ({ item, index }: any) => {
       className="bg-white h-[200px] w-[160px] rounded-xl p-3 mt-6 ml-6 flex flex-col items-center "
     >
       <div className="h-4/6 w-auto flex self-center">
-        <img className="h-full" src={item.image} alt="img" />
+        <img
+          className="h-full rounded-xl"
+          src={backendURL + item.image}
+          alt="img"
+        />
       </div>
 
       <Link to={item.path}>

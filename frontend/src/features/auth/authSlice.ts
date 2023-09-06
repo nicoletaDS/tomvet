@@ -2,6 +2,10 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 import { AuthState } from "./authTypes";
+import { fetchPets } from "../pets/slices/petsSlice";
+import { fetchTasks } from "../pets/slices/tasksSlice";
+import { fetchAppointments } from "../appointment/appointmentSlice";
+import { fetchOrders } from "../profile/ordersSlice";
 
 const backendURL = "http://127.0.0.1:8000";
 
@@ -78,6 +82,13 @@ export const login = createAsyncThunk(
       };
 
       localStorage.setItem("auth", JSON.stringify(result));
+
+      // fetch all data related to user and saved it into store
+      fetchPets();
+      fetchTasks();
+      fetchAppointments();
+      fetchOrders();
+
       return result;
     } catch (error: any) {
       console.log("ERROR:", error);

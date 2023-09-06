@@ -5,8 +5,23 @@ import { Services } from "../../utils/constants/Service";
 import ServiceCard from "./components/ServiceCard";
 import PersonalCard from "./components/PersonalCard";
 import { personal } from "../../utils/constants/Personal";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../store/store";
+import { fetchCabinet } from "../appointment/cabinetSlice";
 
 function HomePage() {
+  const dispatch = useDispatch<AppDispatch>();
+  React.useEffect(() => {
+    const fetchCabinetData = async () => {
+      try {
+        await dispatch(fetchCabinet());
+      } catch (error: any) {
+        console.log("ERROR:", error);
+      }
+    };
+
+    fetchCabinetData();
+  }, [dispatch]);
   return (
     <div className="mt-6 px-10">
       <div className="bg-helllilac rounded-xl">
@@ -29,10 +44,9 @@ function HomePage() {
         <div className="flex flex-row justify-between">
           <p className="w-[400px] pl-4 mt-6 text-xl font-light">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            enim mauris, bibendum malesuada iaculis in, aliquam et turpis. Cras
-            molestie, nibh in fermentum elementum, est velit pellentesque neque,
-            non finibus ex justo in velit. Fusce accumsan orci et justo
-            ultricies, nec tincidunt eros imperdiet.
+            enim mauris, bibendum malesuada iaculis in, aliquam et turpis.
+            <br /> Image created by Mohamed_hassan:
+            https://pixabay.com/ro/users/5229782/
           </p>
           <div className="flex flex-row justify-between pb-10 pr-6">
             {personal.map((item: any, index: number) => (
@@ -44,8 +58,13 @@ function HomePage() {
 
       <div className="flex flex-row items-end">
         <div className="w-1/2 mr-5">
-          <div className="h-[250px] w-auto flex self-center mt-10">
-            <img className="h-full" src="./images/cat.png" alt="img" />
+          <div className=" w-auto flex self-center mt-10">
+            <img
+              width="150"
+              src="https://img.icons8.com/color-glass/48/pet-commands-stay.png"
+              alt="pet-commands-stay"
+            />
+            {/* <img className="h-full" src="./images/cat.png" alt="img" /> */}
           </div>
           <div className="bg-helllilac p-16 rounded-xl ">
             <p className="text-center text-xl font-bold">Despre noi</p>
@@ -95,10 +114,26 @@ function HomePage() {
         </h2>
 
         <div className="flex flex-row justify-between">
-          <img className="h-full" src="./images/personal.png" alt="img" />
-          <img className="h-full" src="./images/personal.png" alt="img" />
-          <img className="h-full" src="./images/personal.png" alt="img" />
-          <img className="h-full" src="./images/personal.png" alt="img" />
+          <img
+            className="h-[200px] w-auto rounded-xl"
+            src="./images/personal.jpg"
+            alt="img"
+          />
+          <img
+            className="h-[200px] w-auto rounded-xl"
+            src="./images/personal.jpg"
+            alt="img"
+          />
+          <img
+            className="h-[200px] w-auto rounded-xl"
+            src="./images/personal.jpg"
+            alt="img"
+          />
+          <img
+            className="h-[200px] w-auto rounded-xl"
+            src="./images/personal.jpg"
+            alt="img"
+          />
         </div>
       </div>
     </div>

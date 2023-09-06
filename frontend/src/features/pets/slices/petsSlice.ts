@@ -13,7 +13,7 @@ export const addPet = createAsyncThunk<Pet, FormData>(
   async (petData: FormData, { rejectWithValue }) => {
     console.log("inainte de tryyy");
     try {
-      console.log("in addPet");
+      console.log("in addPet", petData);
       const pet = await addPetApi(petData);
       console.log("after call:", pet);
 

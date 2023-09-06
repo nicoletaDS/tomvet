@@ -1,19 +1,22 @@
 import { Link, useParams } from "react-router-dom";
 
 import React from "react";
-import AppointmentModal from "../calendar/components/AppointmentModal";
-import { treatments } from "../../utils/constants/Treatments";
-import { Tasks } from "../../utils/constants/Tasks";
-import PetModal from "./components/PetModal";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store/store";
-import PetCard from "./components/PetCard";
+import AppointmentModal from "../../calendar/components/AppointmentModal";
+import { treatments } from "../../../utils/constants/Treatments";
+import { Tasks } from "../../../utils/constants/Tasks";
+import PetModal from "../components/PetModal";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../store/store";
+import PetCard from "../components/PetCard";
+import { fetchPets } from "../slices/petsSlice";
+import { backendURL } from "../../../utils/constants/link";
 
 const PetsScreen = (props: any) => {
   const { pets, loading, error } = useSelector(
     (state: RootState) => state.pets
   );
   const [pet, setPet] = React.useState<Pet | null>(null);
+  const dispatch = useDispatch<AppDispatch>();
   const { id } = useParams();
 
   React.useEffect(() => {
@@ -24,6 +27,13 @@ const PetsScreen = (props: any) => {
       setPet(pets[0]);
     }
   }, [id, pets]);
+
+  React.useEffect(() => {
+    const getPets = async () => {
+      await dispatch(fetchPets());
+    };
+    getPets();
+  }, []);
 
   const [petModalIsOpen, setPetModalIsOpen] = React.useState(false);
 
@@ -55,7 +65,11 @@ const PetsScreen = (props: any) => {
             className="flex flex-col justify-center items-center px-6 hover:cursor-pointer"
           >
             <div className="w-[70%] mt-10 hover:w-[80%] ">
-              <img src={`pet.image`} alt="" />
+              <img
+                src={`${backendURL + pet.image}`}
+                alt="img"
+                className="rounded-xl"
+              />
             </div>
             <p className="mt-1 hover:font-bold ">{pet.name}</p>
             <hr className="bg-lilac w-full h-.5 rounded-full" />

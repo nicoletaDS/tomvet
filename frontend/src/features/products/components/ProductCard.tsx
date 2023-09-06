@@ -1,8 +1,12 @@
 import { Link } from "react-router-dom";
+import { backendURL } from "../../../utils/constants/link";
 
-const backendURL = "http://127.0.0.1:8000";
+interface ProductCardProps {
+  item: Product;
+  index: number;
+}
 
-const ProductCard = ({ item, index }: any) => {
+const ProductCard: React.FC<ProductCardProps> = ({ item, index }) => {
   return (
     <div
       key={index}
@@ -13,12 +17,17 @@ const ProductCard = ({ item, index }: any) => {
         className="h-5/6 flex flex-col justify-between items-center"
       >
         <div className="h-4/6 w-auto">
-          <img className="h-full" src={backendURL + item.image} alt="img" />
+          <img
+            className="h-full rounded-xl"
+            src={backendURL + item.image}
+            alt="img"
+          />
         </div>
         <div className="px-2">
           <p className="font-bold">{item.title}</p>
           <p>
-            {item.price} {item.sell_by}
+            {" "}
+            {item.price} RON {item.sell_by}{" "}
           </p>
         </div>
       </Link>

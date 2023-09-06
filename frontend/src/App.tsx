@@ -8,14 +8,13 @@ import Layout from "./features/layout/Layout";
 import HomeScreen from "./features/home/HomeScreen";
 import LoginScreen from "./features/auth/screens/LoginScreen";
 import Products from "./features/products/Products";
-import Orders from "./features/orders";
 import Profile from "./features/profile/screens/Profile";
 import ProductDetails from "./features/products/ProductDetails";
 import CartScreen from "./features/cart/screens/CartScreen";
 
 import PlaceOrderScreen from "./features/cart/screens/PlaceOrderScreen";
 import Calendar from "./features/calendar/Calendar";
-import PetsScreen from "./features/pets/PetsScreen";
+import PetsScreen from "./features/pets/screens/PetsScreen";
 import ShippingScreen from "./features/cart/screens/ShippingScreen";
 import OrderScreen from "./features/cart/screens/OrderScreen";
 
@@ -38,10 +37,9 @@ function App() {
               path="/finalizarecomanda"
               element={<PlaceOrderScreen />}
             ></Route>
-            <Route path="/orders/:id" element={<OrderScreen />}></Route>
+            <Route path="/comenzi/:id" element={<OrderScreen />}></Route>
             <Route path="/calendar" element={<Calendar />}></Route>
             <Route path="/profil" element={<Profile />}></Route>
-            <Route path="/comenzi" element={<Orders />}></Route>
             <Route path="/animale" element={<PetsScreen />}>
               <Route path=":id" element={<PetsScreen />} />
             </Route>

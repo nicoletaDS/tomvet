@@ -7,8 +7,7 @@ import "./ProductScreen.css";
 import Breadcrumbs from "../../app/components/custom/Breadcrumbs";
 import ProductCard from "./components/ProductCard";
 import { getAllProducts } from "../../app/api/productsApi";
-
-const backendURL = "http://127.0.0.1:8000";
+import { backendURL } from "../../utils/constants/link";
 
 const ProductDetails = (props: any) => {
   const navigate = useNavigate();
@@ -62,7 +61,11 @@ const ProductDetails = (props: any) => {
         <>
           <div className="mt-6 flex flex-row px-10">
             <div className="left">
-              <img src={backendURL + product.image} alt="img"></img>
+              <img
+                className="max-h-[600px] w-auto"
+                src={backendURL + product.image}
+                alt="img"
+              ></img>
             </div>
 
             <div className="right">

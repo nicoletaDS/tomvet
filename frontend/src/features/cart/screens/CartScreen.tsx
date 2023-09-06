@@ -4,9 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 
 import "./style/CartScreen.css";
 import Breadcrumbs from "../../../app/components/custom/Breadcrumbs";
-import { products } from "../../../utils/constants/ProductsData";
 import { AppDispatch, RootState } from "../../../store/store";
 import { addToCart, removeFromCart } from "../slices/cartSlice";
+import { backendURL } from "../../../utils/constants/link";
 
 function CartScreen(props: any) {
   const { id } = useParams();
@@ -23,6 +23,7 @@ function CartScreen(props: any) {
   useEffect(() => {
     const updateCart = async () => {
       if (id) {
+        console.log("in if");
         await dispatch(addToCart({ id, qty }));
       }
     };
@@ -68,7 +69,7 @@ function CartScreen(props: any) {
               <tbody>
                 {cartItems.map((item: any) => (
                   <tr className="cart-item" key={item.product}>
-                    <td className="product-item">
+                    <td className="product-item overflow-hidden">
                       <button
                         className="remove"
                         type="button"
@@ -76,8 +77,13 @@ function CartScreen(props: any) {
                       >
                         x
                       </button>
-                      <Link to={`/products/${item.product}`}>
-                        <img src={item.image} alt={item.name}></img>
+                      <Link to={`/produse/${item.product}`}>
+                        <div className="h-[100px] w-[100px] overflow-hidden">
+                          <img
+                            src={backendURL + item.image}
+                            alt={item.name}
+                          ></img>
+                        </div>
                         <span className="product-item-details">
                           {item.title}
                         </span>

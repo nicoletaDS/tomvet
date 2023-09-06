@@ -12,6 +12,12 @@ export const getOrder = async (id: number) => {
   return order.data;
 };
 
+export const setPaidOrder = async (id: number) => {
+  const order = await authorizedApi.put(`/api/orders/${id}/update/`);
+  console.log("RSP DATA", order.data);
+  return order.data;
+};
+
 export const addOrderApi = async (orderData: {
   orderItems: any;
   delivery_address: Address;
